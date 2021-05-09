@@ -4,8 +4,33 @@ import { Link, useHistory} from "react-router-dom";
 import { auth } from "./firebase";
 
 function Login() {
+    const history = useHistory();
     const [email,setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const signIn = e => {
+        e.preventDefault();
+
+        auth
+            .signInWithEmailAndPassword(email,password)
+            .then(auth => {
+                history.push('/')
+            })
+            .catch(error => alert(error.message))
+    }
+
+    const register = e  => {
+        e.preventDefault();
+
+        auth
+        .createUserWithEmailAndPassword(email,password)
+        .then((auth) => {
+            if(auth) {
+                history.push('/')
+            }
+        })
+        .catch(error => alert(error.message))
+    }
 
     return (
         <div className='login'>
@@ -25,14 +50,14 @@ function Login() {
                     <h5>Password</h5>
                     <input type='password' value={password} onChange={e => setPassword(e.target.value)} />
 
-                    <button type='submit'className='login__signButton'>Sign Ing</button>
+                    <button type='submit' onclick={signIn} className='login__signButton'>Sign Ing</button>
                 </form>
                 <p>
                 By signing-in you agree to the AMAZON FAKE CLONE Conditions of Use & Sale. Please
                     see our Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice.
                 </p>
 
-                <button className='login__registerButton'>Create your amazon accoutn</button>
+                <button  onclick={register} className='login__registerButton'>Create your amazon accoutn</button>
             </div>
 
             
